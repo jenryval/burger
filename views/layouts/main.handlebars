@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="/assets/css/burger_style.css" type="text/css" />
+	<title>Eat-Da-Burger!</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+		integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+		crossorigin="anonymous"></script>
+</head>
+
+<body>
+	{{{ body }}}
+</body>
+
+<script>
+	$(function () {
+		$(".devour-burger").on("click", function (event) {
+			var id = $(this).data("id");
+			var burgerDestroyed = {
+				devoured: 1
+			};
+			$.ajax("/api/burgers/" + id, {
+				type: "PUT",
+				data: burgerDestroyed
+			}).then(
+				function () {
+					console.log("changed waiting to", burgerDestroyed);
+					location.reload();
+				}
+			);
+		});
+		$(".create-form").on("submit", function (event) {
+			event.preventDefault();
+			var newBurger = {
+				burger_name: $.trim($("#burger_name").val().toUpperCase())
+			};
+			$.ajax("/api/burgers", {
+				type: "POST",
+				data: newBurger
+			}).then(
+				function () {
+					console.log("created new burger");
+					location.reload();
+				}
+			);
+		});
+	});
+</script>
+
+</html>
