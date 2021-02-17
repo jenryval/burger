@@ -6,23 +6,40 @@ const router = express.Router();
 
 // GET method 
 router.get('/', (req, res) => {
-    burger.all(function(data){
-        let food = {
+    burger.selectAll(function(data){
+        let hbsObject = {
             burger: data
         };
-        res.render("index", food);
+        res.render("index", hbsObject);
     });
 });
 
-// POST method
-router.post('/api/burger', (req,res) => {
-    burger.create()
-})
-
-
-
-// UPDATE method
-
-
+router.post("/api/burgers", function (req, res) {
+    burger.insertOne(["burger_name", "devoured"], [req.body.burger_name, 0], function (result) {
+      // Send back the ID of the new quote
+      res.json({ id: result.insertId });
+    });
+  });
+  
+  router.put("/api/burgers/:id", function (req, res) {
+    var condition = "id = " + req.params.id;
+  
+    console.log("condition", condition);
+  
+    burger.updateOne(
+      {
+        devoured: req.body.devoured
+      },
+      condition,
+      function (result) {
+        if (result.changedRows === 0) {
+  
+          return res.status(500).end();
+        }
+        res.status(200).end();
+  
+      }
+    );
+  });
 
 module.exports = router
