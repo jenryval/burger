@@ -27,21 +27,22 @@ function printQuestionMarks(num) {
 const orm = {
     selectAll: function(tableInput,cb){
 
-        const queryString = "SELECT * FROM " + tableInput + ";";
+        let queryString = "SELECT * FROM " + tableInput + ";";
         connection.query(queryString, function(err, results){
             if (err) throw err;
             cb(results);
         });
     },
     insertOne: function(table, cols, vals, cb){
+    
 
-        const queryString = "INSERT INTO " + table;
+        let queryString = "INSERT INTO " + table;
 
         queryString += "(";
         queryString += cols.toString();;
-        queryString += ")";
+        queryString += ") ";
         queryString += "VALUES (";
-        queryString += printQuestionMarks(vals.lenght);
+        queryString += printQuestionMarks(vals.length);
         queryString += ")";
 
         connection.query(queryString, vals, function(err, result) {
@@ -54,11 +55,11 @@ const orm = {
     },
     updateOne: function(table, objColVals, condition, cb){
       
-        const queryString = "UPDATE " + table;
+        let queryString = "UPDATE " + table;
 
-        queryString += "SET ";
+        queryString += " SET ";
         queryString += objToSql(objColVals);
-        queryString += "WHERE ";
+        queryString += " WHERE ";
         queryString += condition;
 
         connection.query(queryString, function(err, result){
